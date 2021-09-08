@@ -12,7 +12,7 @@ USER_FILE_PATHS = '/home/*/dbms_users.txt'
 
 cmd = []
 for users in glob(USER_FILE_PATHS):
-    with open("users.txt") as f:
+    with open(users) as f:
 
         # create the test database
         cmd.append('createdb -E UTF8 -O postgres test')

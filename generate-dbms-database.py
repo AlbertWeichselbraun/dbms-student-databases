@@ -5,13 +5,16 @@ Setup student databases and permissions
 
 import subprocess
 from glob import glob
+from pathlib import Path
 
-DATABASES = ('projektdatenbank', 'unidb', 'world', 'bundesliga', 'wetterdaten')
-USER_FILE_PATHS = '/home/*/dbms_users.txt'
+USER_FILE_PATH = '/home/*/dbms_users.txt'
+DATABASE_FILE_PATH = '/opt/dbms-student-databases/databases/*.sql.gz'
 
+DATABASES = [Path(db).name.split('.sql.gz')[0]
+             for db in glob(DATABASE_FILE_PATH)]
 
 cmd = []
-for users in glob(USER_FILE_PATHS):
+for users in glob(USER_FILE_PATH):
     with open(users) as f:
 
         # create the test database
@@ -33,7 +36,7 @@ for users in glob(USER_FILE_PATHS):
             cmd.append('# ------------------------------')
             cmd.append(f"createuser {user_name}")
             cmd.append(f"echo \"ALTER USER \\\"{user_name}\\\" PASSWORD '{user_pass}'\" | psql postgres")
-            for db in DATABASES + ('test', ):
+            for db in DATABASES + ['test']:
                 # access to the default database
                 cmd.append(f"echo \"GRANT CONNECT ON DATABASE {db} TO \\\"{user_name}\\\";\"|psql {db}")
                 cmd.append(f"echo \"GRANT USAGE ON SCHEMA public TO \\\"{user_name}\\\";\"|psql {db}")

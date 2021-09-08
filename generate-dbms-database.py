@@ -13,17 +13,18 @@ DATABASE_FILE_PATH = '/opt/dbms-student-databases/databases/*.sql.gz'
 DATABASES = [Path(db).name.split('.sql.gz')[0]
              for db in glob(DATABASE_FILE_PATH)]
 
+
+# setup databases
 cmd = []
+cmd.append('createdb -E UTF8 -O postgres test')
+
+for db in DATABASES:
+    cmd.append(f'createdb -E UTF8 -O postgres {db}')
+    cmd.append(f'zcat /root/databases/{db}.sql.gz |psql {db}')
+
+# setup users
 for users in glob(USER_FILE_PATH):
     with open(users) as f:
-
-        # create the test database
-        cmd.append('createdb -E UTF8 -O postgres test')
-
-        # create the exam databases
-        for db in DATABASES:
-            cmd.append(f'createdb -E UTF8 -O postgres {db}')
-            cmd.append(f'zcat /root/databases/{db}.sql.gz |psql {db}')
 
         for user in f:
             if not user.strip() or user.startswith("#"):

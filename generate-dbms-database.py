@@ -42,7 +42,7 @@ for users in glob(USER_FILE_PATH):
                 cmd.append(f"echo \"GRANT USAGE ON SCHEMA public TO \\\"{user_name}\\\";\"|psql {db}")
 
                 db_name = f"{db}.{user_name}"
-                cmd.append(f"echo \"DROP DATABASE IF EXISTS \\\"{db_name}\\\"; CREATE DATABASE \\\"{db_name}\\\" WITH TEMPLATE {db} OWNER \\\"{user_name}\\\"; GRANT ALL PRIVILEGES ON DATABASE \\\"{db_name}\\\" TO \\\"{user_name}\\\"\" | psql postgres")
+                cmd.append(f"echo \"DROP DATABASE IF EXISTS \\\"{db_name}\\\"; CREATE DATABASE \\\"{db_name}\\\" WITH TEMPLATE \\\"{db}\\\" OWNER \\\"{user_name}\\\"; GRANT ALL PRIVILEGES ON DATABASE \\\"{db_name}\\\" TO \\\"{user_name}\\\"\" | psql postgres")
                 cmd.append(f"echo \"GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \\\"{user_name}\\\"\" | psql {db_name}")
 
 # execute the database commands

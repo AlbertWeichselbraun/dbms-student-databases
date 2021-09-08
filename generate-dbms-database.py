@@ -20,7 +20,7 @@ cmd.append('createdb -E UTF8 -O postgres test')
 
 for db in DATABASES:
     cmd.append(f'createdb -E UTF8 -O postgres {db}')
-    cmd.append(f'zcat /root/databases/{db}.sql.gz |psql {db}')
+    cmd.append(f'zcat /opt/dbms-student-databases/databases/{db}.sql.gz |psql {db}')
 
 # setup users
 for users in glob(USER_FILE_PATH):
